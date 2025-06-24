@@ -1,0 +1,26 @@
+# Git, GitHub and VScode
+.git
+.githooks
+.github
+.vscode
+.gitignore
+
+# Build & module dirs
+target
+node_modules
+
+# Docker
+.dockerignore
+docker-compose.yml
+Dockerfile
+
+# Fly stuff
+fly.toml
+
+# mprocs
+mprocs.yaml
+
+# Random git stuff
+LICENSE
+README.md
+DS_Store
