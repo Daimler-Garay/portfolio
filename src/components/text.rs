@@ -9,6 +9,8 @@ pub enum TextVariant {
     Default,
     #[tw(class = "text-slate-500 dark:text-slate-400")]
     Dimmed,
+    #[tw(class = "text-black dark:text-black")]
+    Black,
 }
 
 #[derive(TwVariant)]

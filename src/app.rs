@@ -29,7 +29,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <HydrationScripts options=options islands=true islands_router=true/>
             </head>
             <body
-                class="font-inter antialiased bg-gradient-to-b from-slate-50 via-slate-100 to-slate-200 dark:from-slate-900 dark:via-slate-950 dark:to-black
+                class="font-inter antialiased bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-white dark:via-slate-100 dark:to-white
                 mx-auto px-4 sm:px-8 max-w-5xl min-h-screen transition-colors duration-300"
             >
                 <App />
@@ -44,29 +44,42 @@ pub fn Nav() -> impl IntoView {
     let url_data = url.get();
     let current = url_data.path();
 
+    // Helper closure for nav link active highlighting
+    let nav_link_class = |route: &str| {
+        let base = "px-3 py-2 rounded-md text-sm font-medium transition hover:bg-slate-200/60";
+        if current == route {
+            format!("{base} bg-slate-200")
+        } else {
+            base.to_string()
+        }
+    };
+
     view! {
-        <nav class="sticky top-0 z-20 bg-white/80 dark:bg-slate-950/90 backdrop-blur border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <nav class="sticky top-0 z-20 bg-white dark:bg-white border-b border-slate-200 dark:border-slate-200 shadow-sm">
             <div class="flex items-center justify-between h-16 max-w-5xl mx-auto px-4">
-                <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-                    Portfolio
-                </span>
+                <div class="flex-shrink-0 flex items-center">
+                    <img
+                        src="/profile.png"
+                        alt="Daimler Garay"
+                        class="rounded-full w-10 h-10 object-cover border-2 border-indigo-100 shadow"
+                    />
+                </div>
                 <div class="flex gap-6">
-                    <NavLink
-                        to="/"
-                        active={current == "/"}
-                        class="px-3 py-2 rounded-md text-sm font-medium transition hover:bg-slate-200/60 dark:hover:bg-slate-800/50"
-                    >
-                        "Home"
+                    <NavLink to="/" class=nav_link_class("/")>
+                        <Text variant=TextVariant::Black>
+                            "About"
+                        </Text>
                     </NavLink>
-                    <a
-                        href="https://github.com/Daimler-Garay"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="px-3 py-2 rounded-md text-sm font-medium transition hover:bg-slate-200/60 dark:hover:bg-slate-800/50 flex items-center gap-1 text-slate-900 dark:text-white"
-                        aria-label="Projects (GitHub)"
-                    >
-                        <i class="fab fa-github"></i> "Projects"
-                    </a>
+                    <NavLink to="/projects" class=nav_link_class("/projects")>
+                        <Text variant=TextVariant::Black>
+                            "Projects"
+                        </Text>
+                    </NavLink>
+                    <NavLink to="/contact" class=nav_link_class("/contact")>
+                        <Text variant=TextVariant::Black>
+                            "Contact"
+                        </Text>
+                    </NavLink>
                 </div>
             </div>
         </nav>
@@ -76,12 +89,12 @@ pub fn Nav() -> impl IntoView {
 #[component]
 pub fn Footer() -> impl IntoView {
     view! {
-        <footer class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-12 pb-4 text-slate-500 text-sm">
+        <footer class="border-t border-slate-200 dark:border-slate-200 pt-8 mt-12 pb-4 text-black dark:text-black text-sm bg-white dark:bg-white">
             <div class="flex flex-col items-center gap-2 text-center">
-                <strong class="text-slate-800 dark:text-slate-100 mb-1">Contact & Socials</strong>
+                <strong class="text-black dark:text-black mb-1">Contact & Socials</strong>
                 <a
                     href="mailto:garay.daimlerchryslerfernandez@gmail.com"
-                    class="inline-flex items-center gap-1 hover:underline"
+                    class="inline-flex items-center gap-1 hover:underline text-black dark:text-black"
                     title="garay.daimlerchryslerfernandez@gmail.com"
                 >
                     <i class="fas fa-envelope"></i>
@@ -90,17 +103,17 @@ pub fn Footer() -> impl IntoView {
                 <div class="flex gap-4 mt-1">
                     <a
                         href="https://github.com/Daimler-Garay"
-                        class="inline-flex items-center gap-1 hover:text-primary transition-colors"
+                        class="inline-flex items-center gap-1 hover:text-indigo-600 transition-colors text-black dark:text-black"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="GitHub"
                     >
                         <i class="fab fa-github"></i> GitHub
                     </a>
-                    <span class="hidden sm:inline text-slate-400">|</span>
+                    <span class="hidden sm:inline text-black dark:text-black">|</span>
                     <a
                         href="https://www.linkedin.com/in/daimler-chrysler-406341243/"
-                        class="inline-flex items-center gap-1 hover:text-primary transition-colors"
+                        class="inline-flex items-center gap-1 hover:text-indigo-600 transition-colors text-black dark:text-black"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="LinkedIn"
@@ -109,7 +122,7 @@ pub fn Footer() -> impl IntoView {
                     </a>
                 </div>
             </div>
-            <div class="text-center pt-8 text-xs text-slate-400">
+            <div class="text-center pt-8 text-xs text-black dark:text-black">
                 2025 Daimler Garay. All rights reserved.
             </div>
         </footer>
@@ -133,6 +146,8 @@ pub fn App() -> impl IntoView {
             <main class="my-12">
                 <Routes fallback=|| NotFound() transition=true>
                     <Route path=path!("/") view=|| view! { <Home/> }/>
+                    <Route path=path!("/projects") view=|| view! { <Projects/> }/>
+                    <Route path=path!("/contact") view=|| view! { <Contact/> }/>
                 </Routes>
             </main>
             <Footer />

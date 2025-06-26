@@ -16,9 +16,9 @@ pub struct RepoData {
 
 #[derive(thiserror::Error, Serialize, Deserialize, Debug, Clone)]
 pub enum Error {
-    #[error("could't fetch repos")]
+    #[error("couldn't fetch repos")]
     RequestError,
-    #[error("could't decode repos")]
+    #[error("couldn't decode repos")]
     DecodeError,
 }
 
@@ -44,79 +44,95 @@ impl Eq for RepoData {}
 
 #[component]
 pub fn Home() -> impl IntoView {
+    let technologies = vec![
+        "Rust",
+        "Python",
+        "SQL",
+        "Pandas",
+        "TensorFlow",
+        "Excel",
+        "Power BI",
+        "Git",
+    ];
+
     view! {
-            <Card
-                class="grid sm:grid-cols-[auto, auto] grid-cols-[auto]
-                sm:grid-rows-[auto, auto] grid-rows-[auto, auto, auto]"
-            >
-                <div class="sm:col-span-2 mb-8">
-                    <Text class="sm:text-lg">
-                        <i class="fa-solid fa-globe mr-2"/>
-                        "Introduction"
-                    </Text>
+        // Card: Name, title, photo, tech stack
+        <Card variant=CardVariant::Outlined class="flex flex-col md:flex-row items-center bg-white dark:bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto">
+            // PROFILE PHOTO
+            <div class="flex-shrink-0 mb-6 md:mb-0 md:mr-8">
+                <img
+                    src="/profile.png"
+                    alt="Daimler Garay"
+                    class="rounded-full w-40 h-40 object-cover border-4 border-indigo-100 shadow"
+                />
+            </div>
+            // TEXT SECTION
+            <div class="flex flex-col items-center md:items-start">
+                <Text variant=TextVariant::Black class="text-4xl font-bold mb-2">
+                    "Daimler Garay"
+                </Text>
+                <Text variant=TextVariant::Black class="text-lg font-semibold mb-3">
+                    "Junior Data Scientist"
+                </Text>
+                <div class="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
+                    {technologies.into_iter().map(|tech| view! {
+                        <span class="bg-indigo-50 text-indigo-800 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                            {tech}
+                        </span>
+                    }).collect_view()}
                 </div>
-                <div class="grid grid-rows-[auto, auto, auto] gap-4 max-w-lg">
-                    <Text class="lg:text-5xl sm:text-4xl text-2xl font-semibold">
-                        "Hello, I'm Daimler 👋"
-                    </Text>
-                    <Text size=TextSize::Lg variant=TextVariant::Dimmed>
-                        "I am currently a Junior Data Scientist at "
-                        <a
-                            href="https://www.priceindustries.com/"
-                            target="_blank"
-                            class="text-slate-800 dark:text-slate-300"
-                        >
-                            "Price Industries"
-                        </a>
-                        ". I am passionate about data, anything AI related and learning new skills!"
-                    </Text>
+                <Text variant=TextVariant::Black class="text-center md:text-left mb-2">
+                    "I build data-driven solutions and love learning new technologies. Passionate about AI, analytics, and code that makes a difference."
+                </Text>
+                <div class="flex gap-4 mt-3">
+                    <a href="https://github.com/Daimler-Garay" target="_blank">
+                        <i class="fa-brands fa-github text-2xl text-black hover:text-indigo-700"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/daimler-chrysler-406341243/" target="_blank">
+                        <i class="fa-brands fa-linkedin text-2xl text-black hover:text-indigo-700"></i>
+                    </a>
                 </div>
-                <div
-                    class="sm:ml-8 ml-0 sm:mt-0 mt-8 sm:justify-self-end
-                    justify-self-center self-center"
-                >
-                    <img
-                        src="/profile.png"
-                        alt="Daimelr Garay"
-                        class="rounded-full min-[862]:max-w-64 min-[862]:max-h-64
-                        md:max-w-56 md:max-h-56  max-w-48 max-h-48 object-cover"
-                    />
-                </div>
-            </Card>
-            <div class="grid md:grid-cols-2 grid-cols-1 pt-8 gap-8">
-                <div class="flex flex-col gap-6">
-                    <Text size=TextSize::Xl weight=TextWeight::Bold>
-                        "About Me"
-                    </Text>
-                    <Text size=TextSize::Lg variant=TextVariant::Dimmed>
-                        "I began my journey with programming after highscool, where I pursued and finished an associates degree for Data Science and Machine Learning from Red River College in 2024. I have since continued to learn more about this topic through various certificate programs, given that people and organizations around the world continue to push the boundaries for artificial intelligence. My goal is to grow and learn as much as I can and earn my place in this industry."
-                    </Text>
-                    <Text size=TextSize::Lg variant=TextVariant::Dimmed>
-                        "I am currently learning and teaching myself Rust, coming from Python, the paradigm shift is quite significant but I believe that learning Rust will make me a better programmer overall. "
-                    </Text>
-                </div>
-                    <div class="flex flex-col gap-6">
-            <Text size=TextSize::Xl weight=TextWeight::Bold>
-                "Work Experience"
-            </Text>
-            <ul class="flex flex-col gap-4">
-                {WORK_EXPERIENCES.iter().map(|exp| view! {
-                    <li class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl shadow">
-                        <Text size=TextSize::Lg weight=TextWeight::Bold>
-                            {exp.role}
-                        </Text>
-                        <Text size=TextSize::Md>
-                            <span class="text-slate-600 dark:text-slate-400">{exp.company}</span>
-                            {" — "}
-                            <span class="italic">{exp.period}</span>
-                        </Text>
-                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
-                            {exp.description}
-                        </Text>
-                    </li>
-                }).collect_view()}
-            </ul>
+            </div>
+        </Card>
+
+        // About and Work Experience section
+        <div class="grid md:grid-cols-2 grid-cols-1 pt-12 gap-8 max-w-4xl mx-auto">
+            <div class="flex flex-col gap-6 items-center justify-center">
+                <iframe
+                    src="https://www.google.com/maps/d/u/0/embed?mid=1SVhoFmeDvibC2EzX8X16KUaZXY_h-yM&ehbc=2E312F"
+                    width="340"
+                    height="580"
+                    style="border:0;"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="rounded-lg shadow border w-full"
+                ></iframe>
+                <Text variant=TextVariant::Black class="text-sm mt-2 text-center">
+                    "A map of the countries and cities I've visited."
+                </Text>
+            </div>
+            <div class="flex flex-col gap-6">
+                <Text variant=TextVariant::Black class="text-2xl font-bold">
+                    "Work Experience"
+                </Text>
+                <ul class="flex flex-col gap-4">
+                    {WORK_EXPERIENCES.iter().map(|exp| view! {
+                        <li class="p-4 bg-white dark:bg-white rounded-xl shadow">
+                            <Text variant=TextVariant::Black class="text-lg font-bold">
+                                {exp.role}
+                            </Text>
+                            <Text variant=TextVariant::Black class="text-md">
+                                <span>{exp.company}</span>
+                                {" — "}
+                                <span class="italic">{exp.period}</span>
+                            </Text>
+                            <Text variant=TextVariant::Black class="text-sm">
+                                {exp.description}
+                            </Text>
+                        </li>
+                    }).collect_view()}
+                </ul>
+            </div>
         </div>
-    </div>
-        }
+    }
 }
