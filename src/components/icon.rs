@@ -40,7 +40,5 @@ pub fn LanguageIcon(
     #[prop(optional, into)] variant: LanguageIconVariant,
     #[prop(optional, into)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
-    view! {
-        <i class=tw_merge!(variant, class) />
-    }
+    view! { <i class=tw_merge!(variant, class) /> }
 }

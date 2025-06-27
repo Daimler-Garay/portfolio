@@ -17,9 +17,5 @@ pub fn Card(
     #[prop(into, optional)] variant: CardVariant,
     #[prop(into, optional)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
-    view! {
-        <div class=tw_merge!(variant, class)>
-            {children()}
-        </div>
-    }
+    view! { <div class=tw_merge!(variant, class)>{children()}</div> }
 }

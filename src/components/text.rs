@@ -62,9 +62,5 @@ pub fn Text(
     #[prop(optional, into)] transition: TextTransition,
     #[prop(optional, into)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
-    view! {
-        <p class=tw_merge!(variant, size, weight, transition, class)>
-            {children()}
-        </p>
-    }
+    view! { <p class=tw_merge!(variant, size, weight, transition, class)>{children()}</p> }
 }

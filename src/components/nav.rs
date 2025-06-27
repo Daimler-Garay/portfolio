@@ -13,9 +13,7 @@ pub fn NavBar(
         <nav class=tw_merge!(
             "flex gap-x-4 py-3 px-2 items-center",
             class
-        )>
-            {children()}
-        </nav>
+        )>{children()}</nav>
     }
 }
 
@@ -35,13 +33,8 @@ pub fn NavLink(
     };
 
     view! {
-        <a
-            href=to
-            class=tw_merge!(base_class, active_class, class)
-        >
-            <Text size=TextSize::Md>
-                {children()}
-            </Text>
+        <a href=to class=tw_merge!(base_class, active_class, class)>
+            <Text size=TextSize::Md>{children()}</Text>
         </a>
     }
 }

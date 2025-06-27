@@ -18,10 +18,7 @@ pub fn Button(
     #[prop(into)] onclick: impl Fn() + 'static,
 ) -> impl IntoView {
     view! {
-        <button
-            class=tw_merge!(size)
-            on:click=move |_| onclick()
-        >
+        <button class=tw_merge!(size) on:click=move |_| onclick()>
             {text}
         </button>
     }

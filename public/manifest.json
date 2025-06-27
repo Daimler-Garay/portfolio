@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "short_name": "Portfolio",
-  "name": "Kasper's portfolio",
-  "description": "Kasper's portfolio website, created using Leptos",
+  "name": "Daimler's portfolio",
+  "description": "Daimler's portfolio website, created using Leptos",
   "start_url": ".",
   "display": "standalone",
   "icons": [
