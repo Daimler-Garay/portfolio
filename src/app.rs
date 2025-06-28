@@ -23,7 +23,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <meta property="og:title" content="Daimler Garay – Portfolio" />
                 <meta property="og:description" content="Portfolio powered by Rust (Leptos)." />
                 <meta property="og:type" content="website" />
-                <link rel="icon" href="/favicon.ico" sizes="any" />
+                <link rel="icon" href="/favicon.avif" sizes="any" />
                 <link rel="manifest" href="/manifest.json" />
                 <link
                     rel="stylesheet"
@@ -34,8 +34,8 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <AutoReload options=options.clone() />
                 <HydrationScripts options=options islands=true islands_router=true />
             </head>
-            <body class="bg-[url('/background.webp')] bg-cover bg-center font-inter antialiased bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-white dark:via-slate-100 dark:to-white
-            mx-auto px-4 sm:px-8 max-w-5xl min-h-screen transition-colors duration-300">
+            <body class="bg-[url('/background2.jpg')] bg-cover bg-center font-inter antialiased bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-white dark:via-slate-100 dark:to-white
+            mx-auto px-4 sm:px-8 max-w-7xl min-h-screen transition-colors duration-300">
                 <App />
             </body>
         </html>
@@ -59,40 +59,37 @@ pub fn Nav() -> impl IntoView {
     };
 
     view! {
-        <nav class="sticky top-0 z-20 bg-white dark:bg-white border-b border-slate-200 dark:border-slate-200 shadow-sm w-full">
-            <div class="flex items-center justify-between h-16 w-full max-w-7xl mx-auto px-4 sm:px-8">
-                {/* -- LEFT: Logo/Profile Pic -- */}
-                <div class="flex-shrink-0 flex items-center">
-                    <img
-                        src="/profile.png"
-                        alt="Daimler Garay"
-                        class="rounded-full w-10 h-10 object-cover border-2 border-indigo-100 shadow"
-                    />
-                </div>
-                {/* -- CENTER: Navigation Buttons -- */}
-                <div class="flex-1 flex justify-center">
-                    <div class="flex gap-8">
-                        <NavLink to="/" class=nav_link_class("/")>
-                            <Text variant=TextVariant::Black>"About"</Text>
-                        </NavLink>
-                        <NavLink to="/projects" class=nav_link_class("/projects")>
-                            <Text variant=TextVariant::Black>"Projects"</Text>
-                        </NavLink>
-                        <NavLink to="/contact" class=nav_link_class("/contact")>
-                            <Text variant=TextVariant::Black>"Contact"</Text>
-                        </NavLink>
+            <nav class="sticky top-0 z-20 bg-white dark:bg-white border-b border-slate-200 dark:border-slate-200 shadow-sm w-full">
+                <div class="flex items-center justify-between h-16 w-full max-w-7xl mx-auto px-4 sm:px-8">
+                    {} <div class="flex-shrink-0 flex items-center">
+                        <img
+                            src="/profile.png"
+                            alt="Daimler Garay"
+                            class="rounded-full w-10 h-10 object-cover border-2 border-indigo-100 shadow"
+                        />
+                    </div> {} <div class="flex-1 flex justify-center">
+                        <div class="flex gap-8">
+                            <NavLink to="/" class=nav_link_class("/")>
+                                <Text variant=TextVariant::Black>"About"</Text>
+                            </NavLink>
+                            <NavLink to="/projects" class=nav_link_class("/projects")>
+                                <Text variant=TextVariant::Black>"Projects"</Text>
+                            </NavLink>
+                            <NavLink to="/contact" class=nav_link_class("/contact")>
+                                <Text variant=TextVariant::Black>"Contact"</Text>
+                            </NavLink>
+                        </div>
+                    </div> {} <div class="flex-shrink-0 flex items-center">
+    <button
+        class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-300 hover:bg-slate-100 dark:hover:bg-slate-300 transition"
+        aria-label="Toggle dark mode"
+    >
+        <img src="/sun.webp" alt="Toggle dark mode" class="w-7 h-7" />
+    </button>
                     </div>
                 </div>
-                {/* -- RIGHT: Light/Dark Toggle Placeholder -- */}
-                <div class="flex-shrink-0 flex items-center">
-                    <button class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-300 hover:bg-slate-100 dark:hover:bg-slate-300 transition">
-                        {/* You can put an icon here, for now it's a placeholder */}
-                        <span class="text-xl" aria-label="Toggle dark mode🌗"></span>
-                    </button>
-                </div>
-            </div>
-        </nav>
-    }
+            </nav>
+        }
 }
 
 #[component]
