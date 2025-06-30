@@ -1,33 +1,22 @@
-name: Deploy Leptos SPA to GitHub Pages
+name: Rust
 
 on:
   push:
-    branches: [master] # or your default branch
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
-permissions:
-  contents: write
+env:
+  CARGO_TERM_COLOR: always
 
 jobs:
-  build-and-deploy:
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          target: wasm32-unknown-unknown
-          override: true
-
-      - name: Install Leptos CLI
-        run: cargo install cargo-leptos
-
-      - name: Build Leptos SPA
-        run: cargo leptos build --release --public-url /portfolio-rs
-
-      - name: Deploy 🚀
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+    - uses: actions/checkout@v4
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
