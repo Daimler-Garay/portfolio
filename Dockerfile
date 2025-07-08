@@ -44,7 +44,8 @@ RUN chown -R docker:server /var/www/app
 USER docker
 
 ENV RUST_LOG="info"
-ENV LEPTOS_SITE_ADDR="0.0.0.0:3000"
+ENV LEPTOS_SITE_ADDR="0.0.0.0:${PORT}"
+
 ENV LEPTOS_SITE_ROOT="/var/www/app/site"
 
 EXPOSE 3000
