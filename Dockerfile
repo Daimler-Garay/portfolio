@@ -33,7 +33,7 @@ COPY --chown=docker:server --from=builder /build/target/site ./site
 USER docker
 
 ENV RUST_LOG="info"
-# ENV LEPTOS_SITE_ADDR="0.0.0.0:${PORT:-3000}"
+ENV LEPTOS_SITE_ADDR="0.0.0.0:3000"
 ENV LEPTOS_SITE_ROOT="/var/www/app/site"
 
 EXPOSE 3000
