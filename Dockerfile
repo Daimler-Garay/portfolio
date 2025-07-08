@@ -1,37 +1,45 @@
+# ---------- Build Stage ----------
 FROM rust:slim-bookworm AS builder
 WORKDIR /build
 
-RUN apt-get update && apt-get upgrade && \
-    apt-get install -y --no-install-recommends \
-    build-essential npm
+# Install build tools and Node.js (for pnpm)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential npm
 
+# Install pnpm globally
 RUN npm install -g pnpm
 
-COPY rust-toolchain.toml .
+# Copy only package files first (better Docker cache)
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
 
+# Copy the rest of your files
+COPY . .
+
+# Install cargo-leptos
+COPY rust-toolchain.toml .
 RUN rustup update && \
     cargo install --locked --version=0.2.33 cargo-leptos
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    pnpm install
-
-COPY . .
-
+# Build the app (release mode)
 RUN cargo leptos build --release -vv
 
-
+# ---------- Runtime Stage ----------
 FROM debian:bookworm-slim AS runner
 WORKDIR /var/www/app
 
-RUN apt-get update && apt-get upgrade
+RUN apt-get update && apt-get upgrade -y
 
+# Create a non-root user
 RUN groupadd -r server && \
     useradd -r -g server -s /usr/sbin/nologin -c "Docker user" docker && \
+    mkdir -p /var/www/app && \
     chown -R docker:server /var/www/app
 
-COPY --chown=docker:server --from=builder /build/target/release/portfolio ./portfolio
-COPY --chown=docker:server --from=builder /build/target/site ./site
+# Copy built files and set correct owner
+COPY --from=builder /build/target/release/portfolio ./portfolio
+COPY --from=builder /build/target/site ./site
+RUN chown -R docker:server /var/www/app
 
 USER docker
 
