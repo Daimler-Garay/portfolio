@@ -1,7 +1,7 @@
 FROM rust:slim-bookworm AS builder
 WORKDIR /build
 
-RUN apt-get update && apt-get upgrade && \
+RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     build-essential npm
 
@@ -12,9 +12,11 @@ COPY rust-toolchain.toml .
 RUN rustup update && \
     cargo install --locked --version=0.2.33 cargo-leptos
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    pnpm install
+# --- CHANGED SECTION STARTS HERE ---
+COPY package.json .
+COPY pnpm-lock.yaml .
+RUN pnpm install
+# --- CHANGED SECTION ENDS HERE ---
 
 COPY . .
 
@@ -24,7 +26,7 @@ RUN cargo leptos build --release -vv
 FROM debian:bookworm-slim AS runner
 WORKDIR /var/www/app
 
-RUN apt-get update && apt-get upgrade
+RUN apt-get update && apt-get upgrade -y
 
 RUN groupadd -r server && \
     useradd -r -g server -s /usr/sbin/nologin -c "Docker user" docker && \
