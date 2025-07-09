@@ -1,57 +1,44 @@
-# Get started with a build env with Rust nightly
-FROM rustlang/rust:nightly-bookworm as builder
+FROM rust:slim-bookworm AS builder
+WORKDIR /build
 
-# If you’re using stable, use this instead
-# FROM rust:1.88-bookworm as builder
+RUN apt-get update && apt-get upgrade && \
+    apt-get install -y --no-install-recommends \
+    build-essential npm
 
-# Install cargo-binstall, which makes it easier to install other
-# cargo extensions like cargo-leptos
-RUN wget https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz
-RUN tar -xvf cargo-binstall-x86_64-unknown-linux-musl.tgz
-RUN cp cargo-binstall /usr/local/cargo/bin
+RUN npm install -g pnpm
 
-# Install required tools
-RUN apt-get update -y \
-  && apt-get install -y --no-install-recommends clang
+COPY rust-toolchain.toml .
 
-# Install cargo-leptos
-RUN cargo binstall cargo-leptos -y
+RUN rustup update && \
+    cargo install --locked --version=0.2.33 cargo-leptos
 
-# Add the WASM target
-RUN rustup target add wasm32-unknown-unknown
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+    pnpm install
 
-# Make an /app dir, which everything will eventually live in
-RUN mkdir -p /app
-WORKDIR /app
 COPY . .
 
-# Build the app
 RUN cargo leptos build --release -vv
 
-FROM debian:bookworm-slim as runtime
-WORKDIR /app
-RUN apt-get update -y \
-  && apt-get install -y --no-install-recommends openssl ca-certificates \
-  && apt-get autoremove -y \
-  && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/*
 
-# -- NB: update binary name from "leptos_start" to match your app name in Cargo.toml --
-# Copy the server binary to the /app directory
-COPY --from=builder /app/target/release/leptos_start /app/
+FROM debian:bookworm-slim AS runner
+WORKDIR /var/www/app
 
-# /target/site contains our JS/WASM/CSS, etc.
-COPY --from=builder /app/target/site /app/site
+RUN apt-get update && apt-get upgrade
 
-# Copy Cargo.toml if it’s needed at runtime
-COPY --from=builder /app/Cargo.toml /app/
+RUN groupadd -r server && \
+    useradd -r -g server -s /usr/sbin/nologin -c "Docker user" docker && \
+    chown -R docker:server /var/www/app
 
-# Set any required env variables and
+COPY --chown=docker:server --from=builder /build/target/release/portfolio ./portfolio
+COPY --chown=docker:server --from=builder /build/target/site ./site
+
+USER docker
+
 ENV RUST_LOG="info"
-ENV LEPTOS_SITE_ADDR="0.0.0.0:8080"
-ENV LEPTOS_SITE_ROOT="site"
-EXPOSE 8080
+ENV LEPTOS_SITE_ADDR="0.0.0.0:3000"
+ENV LEPTOS_SITE_ROOT="/var/www/app/site"
 
-# -- NB: update binary name from "leptos_start" to match your app name in Cargo.toml --
-# Run the server
-CMD ["/app/portfolio"]
+EXPOSE 3000
+
+CMD ["./portfolio"]
