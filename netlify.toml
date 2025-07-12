@@ -1,4 +1,4 @@
 [build]
 publish = "target/site"
-command = "cargo leptos build --release"
+command = "cargo install cargo-leptos && cargo leptos build --release"
 
